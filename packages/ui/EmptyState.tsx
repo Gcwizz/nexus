@@ -19,7 +19,7 @@ export const EmptyState: Component<EmptyStateProps> = (props) => {
       </Show>
       <Show when={props.action}>
         <button
-          class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+          class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 cursor-pointer"
           onClick={props.action!.onClick}
         >
           {props.action!.label}

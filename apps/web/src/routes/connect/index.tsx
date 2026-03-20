@@ -18,7 +18,7 @@ export default function Connect() {
 
         <div class="border-2 border-dashed border-gray-300 rounded-xl p-12 w-full flex flex-col items-center gap-4">
           <span class="text-gray-400 text-sm">No connectors configured yet</span>
-          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium cursor-pointer">
             Connect your first tool
           </button>
         </div>
