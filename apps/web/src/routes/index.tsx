@@ -29,7 +29,7 @@ function ModuleCard(props: { href: string; number: number; title: string; descri
   return (
     <A
       href={props.href}
-      class="border rounded-xl p-6 bg-white hover:border-blue-400 hover:shadow-md transition-all flex flex-col gap-1"
+      class="border rounded-xl p-6 bg-white hover:border-blue-400 hover:shadow-md transition-all flex flex-col gap-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
     >
       <span class="text-xs text-gray-400 font-mono">Module {props.number}</span>
       <span class="text-lg font-semibold">{props.title}</span>
