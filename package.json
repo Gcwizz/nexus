@@ -1,0 +1,26 @@
+{
+  "name": "nexus",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "modules/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "test:e2e": "turbo test:e2e",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "db:generate": "bun run --filter @nexus/db generate",
+    "db:migrate": "bun run --filter @nexus/db migrate",
+    "db:push": "bun run --filter @nexus/db push",
+    "clean": "turbo clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2",
+    "typescript": "^5.7",
+    "@types/bun": "latest"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@nexus/graph-visualiser",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./types": "./types.ts",
+    "./services/*": "./services/*.ts",
+    "./api/*": "./api/*.ts",
+    "./ui/*": "./ui/*.tsx"
+  },
+  "dependencies": {
+    "@nexus/contracts": "workspace:*",
+    "@nexus/config": "workspace:*",
+    "@nexus/graph": "workspace:*",
+    "@nexus/canvas": "workspace:*",
+    "@nexus/ui": "workspace:*",
+    "3d-force-graph": "^1.73.4",
+    "three": "^0.170.0",
+    "solid-js": "^1.9.4"
+  },
+  "devDependencies": {
+    "@types/three": "^0.170.0"
+  }
+}

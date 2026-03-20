@@ -1,0 +1,19 @@
+{
+  "name": "@nexus/target-designer",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./types": "./types.ts",
+    "./services/*": "./services/*.ts",
+    "./events/*": "./events/*.ts",
+    "./api/*": "./api/*.ts"
+  },
+  "dependencies": {
+    "@nexus/contracts": "workspace:*",
+    "@nexus/config": "workspace:*",
+    "@nexus/events": "workspace:*",
+    "@nexus/graph": "workspace:*",
+    "@nexus/canvas": "workspace:*"
+  }
+}

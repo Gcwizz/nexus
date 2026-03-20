@@ -1,0 +1,11 @@
+{
+  "name": "@nexus/config",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "zod": "^3"
+  }
+}

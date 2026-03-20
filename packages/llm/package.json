@@ -1,0 +1,13 @@
+{
+  "name": "@nexus/llm",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39",
+    "zod": "^3",
+    "@nexus/config": "workspace:*"
+  }
+}

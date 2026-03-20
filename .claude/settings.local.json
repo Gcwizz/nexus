@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(bun:*)",
+      "Bash(for dir:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/IsoSpaces/repos/nexus/apps/web/src/routes/**)",
+      "Bash(done)"
+    ]
+  }
+}

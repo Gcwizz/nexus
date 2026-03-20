@@ -1,0 +1,17 @@
+{
+  "name": "@nexus/contracts",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./events": "./events/index.ts",
+    "./entities": "./entities/index.ts",
+    "./ontology": "./ontology/index.ts",
+    "./processes": "./processes/index.ts",
+    "./specs": "./specs/index.ts",
+    "./errors": "./errors.ts"
+  },
+  "dependencies": {
+    "zod": "^3"
+  }
+}

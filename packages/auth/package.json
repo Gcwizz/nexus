@@ -1,0 +1,13 @@
+{
+  "name": "@nexus/auth",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "better-auth": "^1",
+    "@nexus/config": "workspace:*",
+    "@nexus/db": "workspace:*"
+  }
+}

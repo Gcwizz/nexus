@@ -1,0 +1,14 @@
+{
+  "name": "@nexus/canvas",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "three": "^0.170"
+  },
+  "devDependencies": {
+    "@types/three": "^0.170"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["bun-types"],
+    "paths": {
+      "@nexus/contracts": ["./packages/contracts/index.ts"],
+      "@nexus/contracts/*": ["./packages/contracts/*"],
+      "@nexus/db": ["./packages/db/index.ts"],
+      "@nexus/graph": ["./packages/graph/index.ts"],
+      "@nexus/auth": ["./packages/auth/index.ts"],
+      "@nexus/events": ["./packages/events/index.ts"],
+      "@nexus/llm": ["./packages/llm/index.ts"],
+      "@nexus/storage": ["./packages/storage/index.ts"],
+      "@nexus/canvas": ["./packages/canvas/index.ts"],
+      "@nexus/ui": ["./packages/ui/index.ts"],
+      "@nexus/config": ["./packages/config/index.ts"],
+      "@nexus/connector-hub": ["./modules/connector-hub/index.ts"],
+      "@nexus/ontology-engine": ["./modules/ontology-engine/index.ts"],
+      "@nexus/graph-visualiser": ["./modules/graph-visualiser/index.ts"],
+      "@nexus/process-canvas": ["./modules/process-canvas/index.ts"],
+      "@nexus/optimisation-engine": ["./modules/optimisation-engine/index.ts"],
+      "@nexus/target-designer": ["./modules/target-designer/index.ts"],
+      "@nexus/spec-generator": ["./modules/spec-generator/index.ts"],
+      "@nexus/build-engine": ["./modules/build-engine/index.ts"],
+      "@nexus/migration-engine": ["./modules/migration-engine/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "dist", ".output"]
+}

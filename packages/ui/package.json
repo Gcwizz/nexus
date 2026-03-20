@@ -1,0 +1,11 @@
+{
+  "name": "@nexus/ui",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "solid-js": "^1.9"
+  }
+}

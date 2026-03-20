@@ -1,0 +1,30 @@
+{
+  "name": "@nexus/workers",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch index.ts",
+    "start": "bun index.ts"
+  },
+  "dependencies": {
+    "bullmq": "^5",
+    "@nexus/config": "workspace:*",
+    "@nexus/contracts": "workspace:*",
+    "@nexus/db": "workspace:*",
+    "@nexus/graph": "workspace:*",
+    "@nexus/auth": "workspace:*",
+    "@nexus/events": "workspace:*",
+    "@nexus/llm": "workspace:*",
+    "@nexus/storage": "workspace:*",
+    "@nexus/canvas": "workspace:*",
+    "@nexus/connector-hub": "workspace:*",
+    "@nexus/ontology-engine": "workspace:*",
+    "@nexus/graph-visualiser": "workspace:*",
+    "@nexus/process-canvas": "workspace:*",
+    "@nexus/optimisation-engine": "workspace:*",
+    "@nexus/target-designer": "workspace:*",
+    "@nexus/spec-generator": "workspace:*",
+    "@nexus/build-engine": "workspace:*",
+    "@nexus/migration-engine": "workspace:*"
+  }
+}

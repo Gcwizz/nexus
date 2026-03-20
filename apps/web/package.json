@@ -1,0 +1,46 @@
+{
+  "name": "@nexus/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start",
+    "test": "bun test",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@solidjs/router": "^0.15",
+    "@solidjs/start": "^1.1",
+    "solid-js": "^1.9",
+    "vinxi": "^0.5",
+    "three": "^0.170",
+    "3d-force-graph": "^1",
+    "yjs": "^13",
+    "y-websocket": "^2",
+    "@nexus/contracts": "workspace:*",
+    "@nexus/config": "workspace:*",
+    "@nexus/db": "workspace:*",
+    "@nexus/graph": "workspace:*",
+    "@nexus/auth": "workspace:*",
+    "@nexus/events": "workspace:*",
+    "@nexus/llm": "workspace:*",
+    "@nexus/storage": "workspace:*",
+    "@nexus/canvas": "workspace:*",
+    "@nexus/ui": "workspace:*",
+    "@nexus/connector-hub": "workspace:*",
+    "@nexus/ontology-engine": "workspace:*",
+    "@nexus/graph-visualiser": "workspace:*",
+    "@nexus/process-canvas": "workspace:*",
+    "@nexus/optimisation-engine": "workspace:*",
+    "@nexus/target-designer": "workspace:*",
+    "@nexus/spec-generator": "workspace:*",
+    "@nexus/build-engine": "workspace:*",
+    "@nexus/migration-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1",
+    "tailwindcss": "^4",
+    "@tailwindcss/vite": "^4"
+  }
+}

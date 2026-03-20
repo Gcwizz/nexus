@@ -1,0 +1,13 @@
+{
+  "name": "@nexus/graph",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "neo4j-driver": "^5",
+    "@nexus/config": "workspace:*",
+    "@nexus/contracts": "workspace:*"
+  }
+}

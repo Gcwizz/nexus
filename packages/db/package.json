@@ -1,0 +1,22 @@
+{
+  "name": "@nexus/db",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
+    "push": "drizzle-kit push",
+    "studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.38",
+    "postgres": "^3",
+    "@nexus/config": "workspace:*"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.30"
+  }
+}

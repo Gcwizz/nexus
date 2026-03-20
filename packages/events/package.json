@@ -1,0 +1,13 @@
+{
+  "name": "@nexus/events",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "bullmq": "^5",
+    "@nexus/config": "workspace:*",
+    "@nexus/contracts": "workspace:*"
+  }
+}

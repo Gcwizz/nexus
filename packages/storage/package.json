@@ -1,0 +1,13 @@
+{
+  "name": "@nexus/storage",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3",
+    "@aws-sdk/lib-storage": "^3",
+    "@nexus/config": "workspace:*"
+  }
+}
