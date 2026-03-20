@@ -10,7 +10,7 @@ export default function Home() {
         Autonomous Business Intelligence & Software Generation
       </p>
 
-      <div class="grid grid-cols-3 gap-4 max-w-3xl w-full">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-3xl w-full">
         <ModuleCard href="/connect" number={1} title="Connect" description="Universal Connector Hub" />
         <ModuleCard href="/ontology" number={2} title="Map" description="Ontology Engine" />
         <ModuleCard href="/graph" number={3} title="Explore" description="Knowledge Graph" />
