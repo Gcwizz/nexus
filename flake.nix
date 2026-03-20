@@ -54,9 +54,8 @@
             env = rec {
               PRODUCT_NAME = "Nexus";
 
-              # postgres
+              # postgres (DATABASE_URL set in shellHook — needs $PWD for socket path)
               PGDATABASE = "nexus";
-              DATABASE_URL = "postgres://127.0.0.1/${PGDATABASE}";
 
               # neo4j
               NEO4J_URI = "bolt://localhost:7687";
@@ -83,6 +82,7 @@
               export PATH="$PWD/scripts:$PATH"
               export PGDATA="$PWD/.data/postgres"
               export PGHOST="$PWD/.data/postgres"
+              export DATABASE_URL="postgres:///nexus?host=$PGHOST"
               export NEO4J_HOME="$PWD/.data/neo4j"
 
               # initialise postgres data locally within the project

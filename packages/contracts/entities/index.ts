@@ -20,6 +20,7 @@ export const EntityType = {
   Employee: 'employee',
   Tool: 'tool',
   Process: 'process',
+  Activity: 'activity',
 } as const;
 
 export type EntityType = (typeof EntityType)[keyof typeof EntityType];

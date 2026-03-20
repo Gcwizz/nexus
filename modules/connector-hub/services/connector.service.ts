@@ -8,6 +8,8 @@ import {
 
 // ── Provider Interface ───────────────────────────────────────────
 
+export type AuthType = 'oauth' | 'api_key';
+
 export interface OAuthTokens {
   accessToken: string;
   refreshToken: string;
@@ -25,6 +27,7 @@ export interface FetchEntitiesOptions {
   orgId: string;
   sourceId: string;
   tokens: OAuthTokens;
+  apiKey?: string;
   since?: Date;
   cursor?: string;
   pageSize?: number;
@@ -41,6 +44,7 @@ export interface FetchEntitiesResult {
 export interface ConnectorProvider {
   readonly name: string;
   readonly displayName: string;
+  readonly authType: AuthType;
   readonly scopes: string[];
 
   getAuthUrl(state: string, config: ConnectorProviderConfig): string;
@@ -106,6 +110,7 @@ function authHeaders(accessToken: string): Record<string, string> {
 export class SalesforceProvider implements ConnectorProvider {
   readonly name = 'salesforce';
   readonly displayName = 'Salesforce';
+  readonly authType = 'oauth' as const;
   readonly scopes = ['api', 'refresh_token', 'offline_access'];
 
   private instanceUrl: string = 'https://login.salesforce.com';
@@ -313,6 +318,7 @@ interface SalesforceQueryResult {
 export class XeroProvider implements ConnectorProvider {
   readonly name = 'xero';
   readonly displayName = 'Xero';
+  readonly authType = 'oauth' as const;
   readonly scopes = ['openid', 'profile', 'email', 'accounting.transactions.read', 'accounting.contacts.read', 'accounting.settings.read'];
 
   private readonly authBase = 'https://login.xero.com';
@@ -488,6 +494,7 @@ function formatXeroDate(d: Date): string {
 export class HubSpotProvider implements ConnectorProvider {
   readonly name = 'hubspot';
   readonly displayName = 'HubSpot';
+  readonly authType = 'oauth' as const;
   readonly scopes = ['crm.objects.contacts.read', 'crm.objects.companies.read', 'crm.objects.deals.read'];
 
   private readonly authBase = 'https://app.hubspot.com';
@@ -659,6 +666,149 @@ interface HubSpotListResult {
   };
 }
 
+// ── Pipedrive Provider (API Key) ─────────────────────────────────
+
+export class PipedriveProvider implements ConnectorProvider {
+  readonly name = 'pipedrive';
+  readonly displayName = 'Pipedrive';
+  readonly authType = 'api_key' as const;
+  readonly scopes: string[] = [];
+
+  private readonly apiBase = 'https://api.pipedrive.com/v1';
+
+  // API key providers don't use OAuth — these throw if called
+  getAuthUrl(): string {
+    throw new OAuthProviderError('Pipedrive uses API key authentication, not OAuth');
+  }
+
+  async exchangeCode(): Promise<OAuthTokens> {
+    throw new OAuthProviderError('Pipedrive uses API key authentication, not OAuth');
+  }
+
+  async refreshToken(): Promise<OAuthTokens> {
+    throw new OAuthProviderError('Pipedrive uses API key authentication, not OAuth');
+  }
+
+  /**
+   * Validate an API key by making a lightweight request.
+   */
+  async validateApiKey(apiKey: string): Promise<boolean> {
+    const resp = await fetch(`${this.apiBase}/users/me?api_token=${apiKey}`, {
+      headers: { Accept: 'application/json' },
+    });
+    return resp.ok;
+  }
+
+  async fetchEntities(options: FetchEntitiesOptions): Promise<FetchEntitiesResult> {
+    const { orgId, sourceId, apiKey, cursor, pageSize = 100 } = options;
+
+    if (!apiKey) {
+      throw new OAuthProviderError('Pipedrive requires an API key for data fetching', { orgId });
+    }
+
+    const objectTypes = [
+      { endpoint: 'persons', entityType: EntityType.Person },
+      { endpoint: 'organizations', entityType: EntityType.Company },
+      { endpoint: 'deals', entityType: EntityType.Transaction },
+      { endpoint: 'activities', entityType: EntityType.Activity },
+    ];
+
+    const entities: NormalisedEntity[] = [];
+    let nextCursor: string | undefined;
+    let hasMore = false;
+
+    // If cursor, it's "endpoint:start" format
+    const resumeFrom = cursor ? parsePipedriveCursor(cursor) : null;
+    let skipping = !!resumeFrom;
+
+    for (const obj of objectTypes) {
+      if (skipping && obj.endpoint !== resumeFrom?.endpoint) continue;
+      skipping = false;
+
+      const start = resumeFrom?.endpoint === obj.endpoint ? resumeFrom.start : 0;
+      const params = new URLSearchParams({
+        api_token: apiKey,
+        start: String(start),
+        limit: String(pageSize),
+      });
+
+      const resp = await safeFetch(
+        `${this.apiBase}/${obj.endpoint}?${params}`,
+        { headers: { Accept: 'application/json' } },
+        { provider: this.name, orgId },
+      );
+
+      const data = await resp.json() as PipedriveListResult;
+
+      if (data.data) {
+        for (const item of data.data) {
+          entities.push({
+            id: `pd-${obj.endpoint}-${item.id}`,
+            orgId,
+            sourceId,
+            sourceSystem: 'pipedrive',
+            entityType: obj.entityType,
+            name: this.extractName(item, obj.endpoint),
+            properties: item as unknown as Record<string, unknown>,
+            extractedAt: new Date().toISOString(),
+            confidence: 0.93,
+          });
+        }
+      }
+
+      if (data.additional_data?.pagination?.more_items_in_collection) {
+        const nextStart = data.additional_data.pagination.next_start;
+        nextCursor = `${obj.endpoint}:${nextStart}`;
+        hasMore = true;
+        break; // Paginate through this type first
+      }
+    }
+
+    return { entities, nextCursor, hasMore };
+  }
+
+  private extractName(item: PipedriveItem, endpoint: string): string {
+    switch (endpoint) {
+      case 'persons':
+        return item.name ?? `Person ${item.id}`;
+      case 'organizations':
+        return item.name ?? `Organization ${item.id}`;
+      case 'deals':
+        return item.title ?? `Deal ${item.id}`;
+      case 'activities':
+        return item.subject ?? `Activity ${item.id}`;
+      default:
+        return `${endpoint} ${item.id}`;
+    }
+  }
+}
+
+interface PipedriveItem {
+  id: number;
+  name?: string;
+  title?: string;
+  subject?: string;
+  [key: string]: unknown;
+}
+
+interface PipedriveListResult {
+  success: boolean;
+  data: PipedriveItem[] | null;
+  additional_data?: {
+    pagination?: {
+      start: number;
+      limit: number;
+      more_items_in_collection: boolean;
+      next_start: number;
+    };
+  };
+}
+
+function parsePipedriveCursor(cursor: string): { endpoint: string; start: number } {
+  const [endpoint, startStr] = cursor.split(':');
+  return { endpoint, start: parseInt(startStr, 10) };
+}
+
 // ── Provider Registry ────────────────────────────────────────────
 
 const providers = new Map<string, ConnectorProvider>();
@@ -671,6 +821,7 @@ function registerProvider(provider: ConnectorProvider): void {
 registerProvider(new SalesforceProvider());
 registerProvider(new XeroProvider());
 registerProvider(new HubSpotProvider());
+registerProvider(new PipedriveProvider());
 
 export function getProvider(name: string): ConnectorProvider {
   const provider = providers.get(name);

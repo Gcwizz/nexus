@@ -104,28 +104,44 @@ async function executeSyncJob(payload: SyncJobPayload, signal: AbortSignal): Pro
   }
 
   const source = sources[0];
-  const credentials = source.credentials as {
-    accessToken: string;
-    refreshToken: string;
-    expiresAt: string;
-    providerConfig: ConnectorProviderConfig;
-  } | null;
+  const credentials = source.credentials as Record<string, unknown> | null;
 
   if (!credentials) {
     await failSyncJob(jobId, sourceId, 'No credentials stored for source');
     return;
   }
 
-  let tokens: OAuthTokens = {
-    accessToken: credentials.accessToken,
-    refreshToken: credentials.refreshToken,
-    expiresAt: new Date(credentials.expiresAt),
-  };
-
-  // Refresh tokens if needed
-  tokens = await ensureFreshTokens(sourceId, source.provider, tokens, credentials.providerConfig);
-
   const provider = getProvider(source.provider);
+  const isApiKeyProvider = provider.authType === 'api_key';
+
+  // For API key providers, extract the key; for OAuth, handle tokens
+  let tokens: OAuthTokens = {
+    accessToken: '',
+    refreshToken: '',
+    expiresAt: new Date(0),
+  };
+  let apiKey: string | undefined;
+
+  if (isApiKeyProvider) {
+    apiKey = credentials.apiKey as string;
+    if (!apiKey) {
+      await failSyncJob(jobId, sourceId, 'No API key stored for source');
+      return;
+    }
+  } else {
+    const oauthCreds = credentials as {
+      accessToken: string;
+      refreshToken: string;
+      expiresAt: string;
+      providerConfig: ConnectorProviderConfig;
+    };
+    tokens = {
+      accessToken: oauthCreds.accessToken,
+      refreshToken: oauthCreds.refreshToken,
+      expiresAt: new Date(oauthCreds.expiresAt),
+    };
+    tokens = await ensureFreshTokens(sourceId, source.provider, tokens, oauthCreds.providerConfig);
+  }
 
   // Resume from checkpoint if available
   let currentCheckpoint: SyncCheckpoint = payload.checkpoint ?? {
@@ -150,13 +166,17 @@ async function executeSyncJob(payload: SyncJobPayload, signal: AbortSignal): Pro
     // Fetch page with rate limit backoff
     const result: FetchEntitiesResult = await withRateLimitBackoff(
       async () => {
-        // Refresh tokens on each page in case they expire mid-sync
-        tokens = await ensureFreshTokens(sourceId, source.provider, tokens, credentials.providerConfig);
+        // Refresh OAuth tokens on each page in case they expire mid-sync
+        if (!isApiKeyProvider) {
+          const oauthCreds = credentials as { providerConfig: ConnectorProviderConfig };
+          tokens = await ensureFreshTokens(sourceId, source.provider, tokens, oauthCreds.providerConfig);
+        }
 
         return provider.fetchEntities({
           orgId,
           sourceId,
           tokens,
+          apiKey,
           since: mode === 'incremental' && source.lastSyncAt ? source.lastSyncAt : undefined,
           cursor,
           pageSize: ENTITY_BATCH_SIZE,

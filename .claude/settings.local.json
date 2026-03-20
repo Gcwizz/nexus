@@ -8,7 +8,20 @@
       "Read(//Users/IsoSpaces/repos/nexus/apps/web/src/routes/**)",
       "Bash(done)",
       "Bash(podman --version)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(turbo dev:*)",
+      "Skill(investigate)",
+      "Bash(find /Users/levi/repos/xgx/nexus/apps/web -type f -name *oauth* -o -name *auth*)",
+      "Bash(grep -r \"listProviders\\\\|getProvider\\\\|registerProvider\" /Users/levi/repos/xgx/nexus --include=*.ts --include=*.tsx)",
+      "Bash(grep -r \"createApiHandler\\\\|api\\\\|route\\\\|post\\\\|get\" /Users/levi/repos/xgx/nexus/apps/web/src --include=*.ts --include=*.tsx)",
+      "Bash(find /Users/levi/repos/xgx/nexus/apps/web -type f -name server.ts -o -name entry-server.ts -o -name api*)",
+      "Bash(find /Users/levi/repos/xgx/nexus/packages -name *auth* -o -name *middleware*)",
+      "Bash(grep -r \"export.*routes\\\\|graphRoutes\" /Users/levi/repos/xgx/nexus/modules --include=*.ts)",
+      "Bash(B=~/.claude/skills/gstack/browse/dist/browse)",
+      "Bash($B goto:*)",
+      "Bash($B screenshot:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

@@ -9,9 +9,17 @@
 export type * from "./types.js";
 
 // -- Services ----------------------------------------------------------------
-export { /* ConnectorRegistry */ } from "./services/connector-registry.js";
-export { /* IngestionPipeline */ } from "./services/ingestion-pipeline.js";
-export { /* ConnectionManager */ } from "./services/connection-manager.js";
+export {
+  getProvider,
+  listProviders,
+  PipedriveProvider,
+  type ConnectorProvider,
+  type AuthType,
+  type FetchEntitiesOptions,
+  type FetchEntitiesResult,
+  type OAuthTokens,
+  type ConnectorProviderConfig,
+} from "./services/connector.service.js";
 
 // -- Event handlers ----------------------------------------------------------
 export { /* onConnectionCreated */ } from "./events/on-connection-created.js";
