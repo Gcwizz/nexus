@@ -6,7 +6,9 @@
       "Bash(for dir:*)",
       "Bash(do echo:*)",
       "Read(//Users/IsoSpaces/repos/nexus/apps/web/src/routes/**)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(podman --version)",
+      "Bash(chmod:*)"
     ]
   }
 }

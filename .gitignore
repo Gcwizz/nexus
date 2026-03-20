@@ -11,3 +11,8 @@ dist/
 coverage/
 playwright-report/
 test-results/
+
+# nix dev services
+.data/
+.direnv/
+result

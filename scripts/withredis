@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ $# -eq 0 ]; then
+  echo "Usage: withredis <command> [args...]" >&2
+  exit 1
+fi
+
+REDIS_DIR="${PWD}/.data/redis"
+REDIS_PID="${REDIS_DIR}/redis.pid"
+REDIS_PORT="${REDIS_PORT:-6379}"
+
+# Check if redis is already running
+redis-cli -p "$REDIS_PORT" ping &>/dev/null && was_running=true || was_running=false
+
+if ! $was_running; then
+  echo "redis: starting…"
+  redis-server --port "$REDIS_PORT" --dir "$REDIS_DIR" --daemonize yes --pidfile "$REDIS_PID"
+fi
+
+cleanup() {
+  if ! $was_running; then
+    echo "redis: stopping…"
+    redis-cli -p "$REDIS_PORT" shutdown nosave &>/dev/null || true
+  fi
+}
+trap cleanup EXIT
+
+"$@"

@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ $# -eq 0 ]; then
+  echo "Usage: withpg <command> [args...]" >&2
+  exit 1
+fi
+
+if [ -z "${PGDATA:-}" ] || [ -z "${PGHOST:-}" ]; then
+  echo "PGDATA and PGHOST must be set (enter the Nix dev shell first)" >&2
+  exit 1
+fi
+
+# Check if postgres is already running
+pg_isready -q && was_running=true || was_running=false
+
+if ! $was_running; then
+  echo "postgres: starting…"
+  pg_ctl start -s -D "$PGDATA" -l "$PGDATA/../postgres.log" -o "-k $PGHOST"
+fi
+
+cleanup() {
+  if ! $was_running; then
+    echo "postgres: stopping…"
+    pg_ctl stop -s -D "$PGDATA"
+  fi
+}
+trap cleanup EXIT
+
+"$@"
