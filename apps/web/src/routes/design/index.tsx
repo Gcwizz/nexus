@@ -3,7 +3,7 @@ import { A } from '@solidjs/router';
 export default function Design() {
   return (
     <main class="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-8">
-      <A href="/" class="text-sm text-gray-400 hover:text-gray-600 mb-8 self-start">
+      <A href="/" class="text-sm text-gray-400 hover:text-gray-600 mb-8 self-start py-2 inline-flex items-center min-h-[44px]">
         &larr; Back to Dashboard
       </A>
 
