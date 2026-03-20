@@ -21,7 +21,8 @@
       "Bash($B goto:*)",
       "Bash($B screenshot:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }
